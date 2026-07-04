@@ -1,7 +1,7 @@
 # =================================================================
 # PROYECTO FINAL: FINCA EL PUENTE
 # ASIGNATURA: BASE DE DATOS II — PROFESOR BALTAZAR
-# ARCHIVO: gui.py (VERSIÓN FINAL CON ASISTENTE IA Y GENERADOR QR)
+# ARCHIVO: gui.py (SISTEMA INTEGRAL CON QR MÓVIL Y CHATBOT IA)
 # =================================================================
 
 import customtkinter as ctk
@@ -16,6 +16,7 @@ import webbrowser
 import os
 from conexion import obtener_conexion
 
+# Configuración estética global del sistema
 ctk.set_appearance_mode("Light")  
 ctk.set_default_color_theme("green")  
 
@@ -23,10 +24,16 @@ class AppGanado(ctk.CTk):
     def __init__(self):
         super().__init__()
         
+        # 1. CONFIGURACIÓN DE LA VENTANA PRINCIPAL
         self.title("Finca El Puente — Sistema Inteligente de Gestión Ganadera")
         self.geometry("1200x720")
         self.configure(fg_color="#F4F6F4") # Fondo general sutil
         
+        # ⚠️ CONFIGURACIÓN CLOUD: CORREGIDA CON TU USUARIO Y REPOSITORIO DE GITHUB
+        self.github_user = "JRaFFy03" 
+        self.github_repo = "BD-II---Finca-el-Puente"
+        self.url_base_movil = f"https://{self.github_user}.github.io/{self.github_repo}/ficha.html"
+
         # Fuentes institucionales
         self.font_titulo = ctk.CTkFont(family="Segoe UI", size=22, weight="bold")
         self.font_sub = ctk.CTkFont(family="Segoe UI", size=14, weight="bold")
@@ -36,6 +43,7 @@ class AppGanado(ctk.CTk):
         self.qr_temp_data = None
         self.qr_temp_codigo = None
 
+        # Intentar cargar la imagen temática de fondo para el menú lateral
         self.img_sidebar = None
         try:
             url_finca = "https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?q=80&w=300&auto=format&fit=crop"
@@ -51,6 +59,7 @@ class AppGanado(ctk.CTk):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
         
+        # 2. MENÚ LATERAL ELEGANTE
         self.menu_lateral = ctk.CTkFrame(self, width=220, corner_radius=0, fg_color="#1E4620")
         self.menu_lateral.grid(row=0, column=0, sticky="nsew")
         
@@ -61,6 +70,7 @@ class AppGanado(ctk.CTk):
             self.lbl_logo = ctk.CTkLabel(self.menu_lateral, text="🚜 Finca El Puente", font=ctk.CTkFont(family="Segoe UI", size=18, weight="bold"), text_color="white")
             self.lbl_logo.pack(pady=25)
 
+        # BOTONES DE NAVEGACIÓN
         self.btn_dashboard = ctk.CTkButton(self.menu_lateral, text="🏡 Dashboard", fg_color="transparent", text_color="white", anchor="w", font=self.font_cuerpo, command=self.mostrar_dashboard)
         self.btn_dashboard.pack(fill="x", padx=15, pady=5)
         
@@ -81,6 +91,7 @@ class AppGanado(ctk.CTk):
         
         ctk.CTkLabel(self.menu_lateral, text="UTP - Chiriquí 2026", text_color="#A5D6A7", font=ctk.CTkFont(size=10)).pack(side="bottom", pady=15)
 
+        # 3. CONTENEDOR DE TRABAJO DERECHO
         self.frame_derecho = ctk.CTkFrame(self, fg_color="transparent")
         self.frame_derecho.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
         self.frame_derecho.grid_columnconfigure(0, weight=1)
@@ -94,6 +105,7 @@ class AppGanado(ctk.CTk):
         self.contenedor_principal.grid_columnconfigure(0, weight=1)
         self.contenedor_principal.grid_rowconfigure(0, weight=1)
         
+        # 4. BOTÓN DEL CHATBOT CON IA FLOTANTE
         self.btn_chatbot_flotante = ctk.CTkButton(
             self, text="💬 Asistente IA", fg_color="#2E7D32", hover_color="#1B5E20", text_color="white",
             width=130, height=40, corner_radius=20, font=ctk.CTkFont(family="Helvetica", size=13, weight="bold"),
@@ -149,7 +161,7 @@ class AppGanado(ctk.CTk):
                 conn.close()
 
     # =================================================================
-    # MÓDULO 2: CONTROL DE GANADO (CON INTEGRACIÓN QR MÓVIL)
+    # MÓDULO 2: CONTROL DE GANADO (CON INTEGRACIÓN QR)
     # =================================================================
     def mostrar_ganado(self):
         self.limpiar_contenedor()
@@ -213,19 +225,19 @@ class AppGanado(ctk.CTk):
         ctk.CTkButton(frame_btn, text="💾 Registrar", width=80, fg_color="#1E4620", hover_color="#143016", command=self.guardar_ganado).grid(row=0, column=0, padx=3)
         ctk.CTkButton(frame_btn, text="🗑️ Eliminar", width=80, fg_color="#C62828", hover_color="#B71C1C", command=self.eliminar_ganado).grid(row=0, column=1, padx=3)
 
-        # --- PANEL CENTRAL: VISUALIZADOR DE CÓDIGO QR ---
+        # --- PANEL CENTRAL: CÓDIGO QR ---
         self.frame_qr = ctk.CTkFrame(self.vista_actual, fg_color="#F9F9F9", width=180, corner_radius=10, border_width=1, border_color="#E0E0E0")
         self.frame_qr.grid(row=0, column=1, padx=15, pady=5, sticky="ns")
         
         ctk.CTkLabel(self.frame_qr, text="Identificación QR", font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"), text_color="#1E4620").pack(pady=10)
         
-        self.lbl_qr_visual = ctk.CTkLabel(self.frame_qr, text="Seleccione un\nanimal de la\ntabla para\ngenerar QR", text_color="#555555", width=140, height=140, fg_color="#FFFFFF", corner_radius=8)
+        self.lbl_qr_visual = ctk.CTkLabel(self.frame_qr, text="Seleccione un\nanimal para\ngenerar QR", text_color="#555555", width=140, height=140, fg_color="#FFFFFF", corner_radius=8)
         self.lbl_qr_visual.pack(pady=10, padx=15)
         
         self.btn_guardar_qr = ctk.CTkButton(self.frame_qr, text="📥 Descargar QR", width=130, fg_color="#2E7D32", hover_color="#1B5E20", state="disabled", command=self.descargar_qr_seleccionado)
         self.btn_guardar_qr.pack(pady=10)
 
-        # --- PANEL DERECHO: TABLA TREEVIEW ---
+        # --- PANEL DERECHO: TABLA ---
         self.tabla_ganado = None
         self.crear_tabla_ganado_vista()
         self.cargar_datos_ganado()
@@ -293,31 +305,26 @@ class AppGanado(ctk.CTk):
                     self.ent_observaciones.delete(0, 'end')
                     self.ent_observaciones.insert(0, fila[9] if fila[9] else "")
 
-                    # Generar QR dinámico
-                    self.generar_qr_online(fila[0], fila[1], fila[2], fila[3], fila[5], fila[6])
+                    # Generar QR dinámico que apunta a tu web móvil con parámetros
+                    self.generar_qr_online(fila[0], fila[1], fila[2], fila[3], fila[6])
             except Exception as e:
                 print(f"Error al cargar selección: {e}")
             finally:
                 cursor.close()
                 conn.close()
 
-    def generar_qr_online(self, codigo, nombre, raza, sexo, peso_inicial, estado):
+    def generar_qr_online(self, codigo, nombre, raza, sexo, estado):
         try:
-            # Para cumplir con "consulta de información desde dispositivos móviles",
-            # el QR codificará un enlace a la Ficha Móvil Oficial en la nube (GitHub Pages),
-            # pasando los parámetros de forma segura para renderizar la tarjeta en el celular.
-            url_ficha_movil = (
-                f"https://jraffy03.github.io/BD-II---Finca-el-Puente/" # <-- CAMBIA ESTO
-                f"id={urllib.parse.quote(str(codigo))}&"
-                f"nombre={urllib.parse.quote(str(nombre))}&"
-                f"raza={urllib.parse.quote(str(raza))}&"
-                f"sexo={urllib.parse.quote(str(sexo))}&"
-                f"estado={urllib.parse.quote(str(estado))}&"
-                f"peso={urllib.parse.quote(f'{float(peso_inicial):.1f}')}"
-            )
-            
-            datos_url_safe = urllib.parse.quote(url_ficha_movil)
-            url_api = f"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={datos_url_safe}"
+            # Creamos la URL que recibirá la ficha web móvil para renderizar los datos
+            params = urllib.parse.urlencode({
+                "id": codigo,
+                "nombre": nombre,
+                "raza": raza,
+                "sexo": sexo,
+                "estado": estado
+            })
+            url_destino = f"{self.url_base_movil}?{params}"
+            url_api = f"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={urllib.parse.quote(url_destino)}"
             
             req = urllib.request.Request(url_api, headers={'User-Agent': 'Mozilla/5.0'})
             with urllib.request.urlopen(req) as response:
@@ -344,8 +351,8 @@ class AppGanado(ctk.CTk):
         ruta_guardado = filedialog.asksaveasfilename(
             defaultextension=".png",
             filetypes=[("Imagen PNG", "*.png")],
-            title="Guardar Código QR de Identificación",
-            initialfile=f"QR_Identificacion_{self.qr_temp_codigo}.png"
+            title="Guardar Código QR",
+            initialfile=f"QR_Móvil_{self.qr_temp_codigo}.png"
         )
         if not ruta_guardado:
             return
@@ -353,9 +360,9 @@ class AppGanado(ctk.CTk):
         try:
             with open(ruta_guardado, "wb") as f:
                 f.write(self.qr_temp_data)
-            messagebox.showinfo("Éxito", f"🎉 El código QR de consulta móvil para el animal {self.qr_temp_codigo} se descargó exitosamente.")
+            messagebox.showinfo("Éxito", f"🎉 QR descargado con éxito para impresión.")
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudo guardar el archivo: {e}")
+            messagebox.showerror("Error", f"Fallo al guardar: {e}")
 
     def cargar_datos_ganado(self):
         for i in self.tabla_ganado.get_children():
@@ -774,11 +781,9 @@ class AppGanado(ctk.CTk):
         alto_barra_alim = int((alimento / max_alimento) * 110)
         alto_barra_sani = int((sanidad / max_sanidad) * 110)
         
-        # Barra de Alimentación
         self.canvas_grafico.create_rectangle(150, 140 - alto_barra_alim, 250, 140, fill="#4CAF50", outline="#2E7D32", width=1)
         self.canvas_grafico.create_text(200, 155, text=f"Alimento: {alimento:.1f} Kg", font=("Arial", 10, "bold"), fill="#333333")
         
-        # Barra de Control Médico
         self.canvas_grafico.create_rectangle(380, 140 - alto_barra_sani, 480, 140, fill="#FF9800", outline="#E65100", width=1)
         self.canvas_grafico.create_text(430, 155, text=f"Sanidad: {sanidad} Reg.", font=("Arial", 10, "bold"), fill="#333333")
         
@@ -821,7 +826,7 @@ class AppGanado(ctk.CTk):
                 for fila in cursor.fetchall():
                     escritor.writerow([fila[0], fila[1], fila[2], fila[3], fila[4], f"{fila[5]:.2f}", fila[6]])
                     
-            messagebox.showinfo("Reporte Completo", "🎉 ¡Reporte Excel con estadísticas numéricas generado exitosamente!")
+            messagebox.showinfo("Reporte Completo", "🎉 ¡Reporte Excel generado exitosamente!")
         except Exception as e:
             messagebox.showerror("Error", f"Fallo al guardar: {e}")
         finally:
@@ -944,11 +949,11 @@ class AppGanado(ctk.CTk):
 </body>
 </html>""")
                 
-            messagebox.showinfo("Reporte Generado", "📄 ¡El Reporte Ejecutivo se ha estructurado con éxito! Se abrirá en tu navegador donde podrás guardarlo o imprimirlo directamente como un PDF limpio.")
+            messagebox.showinfo("Reporte Generado", "📄 ¡El Reporte se ha estructurado con éxito! Se abrirá en tu navegador.")
             webbrowser.open(f"file://{os.path.abspath(ruta_archivo)}")
             
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudo compilar el reporte visual: {e}")
+            messagebox.showerror("Error", f"No se pudo compilar: {e}")
         finally:
             cursor.close()
             conn.close()
@@ -964,11 +969,8 @@ class ChatbotWindow(ctk.CTkToplevel):
         self.geometry("480x620")
         self.configure(fg_color="#F4F6F4")
         self.resizable(False, False)
-        
-        # Mantener siempre al frente
         self.attributes("-topmost", True)
         
-        # --- CABECERA DEL CHATBOT ---
         self.header = ctk.CTkFrame(self, fg_color="#1E4620", height=60, corner_radius=0)
         self.header.pack(fill="x", side="top")
         
@@ -984,16 +986,14 @@ class ChatbotWindow(ctk.CTkToplevel):
         )
         self.lbl_estado.pack(pady=12, padx=15, side="right")
         
-        # --- ÁREA DE MENSAJES (SCROLLABLE) ---
         self.historial_mensajes = ctk.CTkScrollableFrame(self, fg_color="#FFFFFF", corner_radius=12, border_width=1, border_color="#E0E0E0")
         self.historial_mensajes.pack(fill="both", expand=True, padx=15, pady=15)
         
-        # --- BARRA DE ENTRADA DE TEXTO ---
         self.frame_entrada = ctk.CTkFrame(self, fg_color="transparent")
         self.frame_entrada.pack(fill="x", side="bottom", padx=15, pady=(0, 15))
         
         self.ent_consulta = ctk.CTkEntry(
-            self.frame_entrada, placeholder_text="Pregunta por un animal, peso o vacuna (Ej: Hércules)...",
+            self.frame_entrada, placeholder_text="Pregunta por un animal, peso o vacuna...",
             fg_color="white", border_color="#B0BEC5", height=40, font=ctk.CTkFont(family="Helvetica", size=12)
         )
         self.ent_consulta.pack(side="left", fill="x", expand=True, padx=(0, 10))
@@ -1006,7 +1006,6 @@ class ChatbotWindow(ctk.CTkToplevel):
         )
         self.btn_enviar.pack(side="right")
         
-        # Mensaje de bienvenida inicial de la IA
         self.agregar_burbuja_texto(
             "¡Hola! Soy tu Asistente Inteligente de Finca El Puente. ¿En qué puedo ayudarte hoy?\n\n"
             "💡 Sugerencias:\n"
@@ -1047,27 +1046,22 @@ class ChatbotWindow(ctk.CTkToplevel):
             font=ctk.CTkFont(family="Helvetica", size=12)
         )
         lbl.pack()
-        
         self.historial_mensajes._parent_canvas.yview_moveto(1.0)
 
     def procesar_ia_ganadera(self, consulta):
         consulta_min = consulta.lower()
-        
         conn = obtener_conexion()
         if not conn:
-            self.agregar_burbuja_texto("⚠️ Error de Red: No logré conectar con la base de datos SQL Server.", es_asistente=True)
+            self.agregar_burbuja_texto("⚠️ Error de Red: No logré conectar con SQL Server.", es_asistente=True)
             return
             
         cursor = conn.cursor()
         try:
-            # CASO A: ESTADÍSTICAS GENERALES DE LA FINCA
             if any(x in consulta_min for x in ["estadística", "general", "finca", "resumen", "total", "indicador", "promedio"]):
                 cursor.execute("SELECT COUNT(*) FROM ganado")
                 total_ganado = cursor.fetchone()[0] or 0
-                
                 cursor.execute("SELECT SUM(cantidad_kg) FROM alimentacion")
                 total_alimento = float(cursor.fetchone()[0] or 0.0)
-                
                 cursor.execute("SELECT AVG(peso_kg) FROM pesajes")
                 peso_promedio = float(cursor.fetchone()[0] or 0.0)
                 
@@ -1076,13 +1070,11 @@ class ChatbotWindow(ctk.CTkToplevel):
                     f"Actualmente en la Finca El Puente tenemos registrados:\n"
                     f"• {total_ganado} cabezas de ganado en inventario.\n"
                     f"• {total_alimento:.2f} Kg de alimento suministrado acumulado.\n"
-                    f"• Peso promedio general de pesajes: {peso_promedio:.2f} Kg.\n\n"
-                    f"¿Te gustaría que indague sobre el historial clínico de algún ejemplar en específico?"
+                    f"• Peso promedio general de pesajes: {peso_promedio:.2f} Kg."
                 )
                 self.agregar_burbuja_texto(respuesta, es_asistente=True)
                 return
 
-            # CASO B: DETECTAR CONSULTA DE ANIMAL ESPECÍFICO (Nombre o Código)
             palabras = consulta.split()
             ejemplar_encontrado = None
             
@@ -1100,10 +1092,8 @@ class ChatbotWindow(ctk.CTkToplevel):
             if ejemplar_encontrado:
                 cod, nom, raz, sex, peso_i, est, obs = ejemplar_encontrado
                 obs = obs or "Sin notas clínicas adicionales en el expediente."
-                
                 cursor.execute("SELECT COUNT(*) FROM sanidad WHERE codigo_animal = ?", (cod,))
                 cont_sani = cursor.fetchone()[0] or 0
-                
                 cursor.execute("SELECT SUM(cantidad_kg) FROM alimentacion WHERE codigo_animal = ?", (cod,))
                 cont_alim = float(cursor.fetchone()[0] or 0.0)
                 
@@ -1112,51 +1102,38 @@ class ChatbotWindow(ctk.CTkToplevel):
                     f"• Raza registrada: {raz} — Sexo: {sex}\n"
                     f"• Estado Operativo: {est}\n"
                     f"• Peso al ingresar: {peso_i:.2f} Kg\n"
-                    f"• Controles Médicos: {cont_sani} registros aplicados.\n"
-                    f"• Ración Alimentaria total: {cont_alim:.2f} Kg.\n"
-                    f"• Notas de campo: {obs}\n\n"
-                    f"Los datos proceden directamente de las tablas relacionales de la base de datos."
+                    f"• Controles Médicos: {cont_sani} registros.\n"
+                    f"• Ración Alimentaria: {cont_alim:.2f} Kg.\n"
+                    f"• Notas de campo: {obs}"
                 )
                 self.agregar_burbuja_texto(respuesta, es_asistente=True)
                 return
 
-            # CASO C: RECOMENDACIONES DE SALUD / VACUNAS
             if any(x in consulta_min for x in ["vacuna", "enfermo", "sanidad", "tratamiento", "médico", "salud", "inyección"]):
                 cursor.execute("SELECT COUNT(*) FROM sanidad")
                 total_tratamientos = cursor.fetchone()[0] or 0
                 respuesta = (
                     f"💉 *Asistencia Clínica Veterinaria*\n\n"
                     f"El sistema registra un total de {total_tratamientos} tratamientos aplicados en finca.\n"
-                    f"Recuerde que para la cría de ganado Brahman en Chiriquí, se sugiere vacunar contra Rabia Paralítica y el carbón bacteridiano al menos una vez al año.\n\n"
-                    f"¿Desea consultar el historial de algún animal específico? Escriba su nombre."
+                    f"Se sugiere vacunar contra Rabia Paralítica al menos una vez al año."
                 )
                 self.agregar_burbuja_texto(respuesta, es_asistente=True)
                 return
 
-            # CASO D: CONSEJOS GENERALES DE GANADERÍA (AGRO-IA)
             if any(x in consulta_min for x in ["consejo", "brahman", "pasto", "alimentar", "silo", "melaza", "calor"]):
                 respuesta = (
                     f"🌾 *Recomendación Agrícola de la IA*\n\n"
-                    f"• *Manejo del Calor:* El ganado Brahman tolera bien el sol, pero es vital tener árboles de sombra y agua fresca disponible.\n"
-                    f"• *Dieta Balanceada:* Complemente el pastoreo directo con mezclas de melaza y sales minerales en épocas secas para proteger el peso corporal.\n"
-                    f"• *Registro:* Mantener el pesaje al día es la única forma confiable de medir si el ganado está asimilando bien el alimento."
+                    f"• *Manejo del Calor:* Es vital tener árboles de sombra y agua fresca disponible.\n"
+                    f"• *Dieta:* Complemente el pastoreo directo con mezclas de melaza y sales minerales en épocas secas."
                 )
                 self.agregar_burbuja_texto(respuesta, es_asistente=True)
                 return
 
-            # CASO E: SALUDO
             if any(x in consulta_min for x in ["hola", "buen", "saludo", "tal", "asistente", "hey"]):
-                self.agregar_burbuja_texto("¡Hola! Un placer saludarte. Estoy listo para procesar tus consultas relacionales sobre la Finca El Puente. ¿Qué animal deseas buscar hoy?", es_asistente=True)
+                self.agregar_burbuja_texto("¡Hola! Un placer saludarte. Estoy listo para procesar tus consultas relacionales sobre la Finca El Puente.", es_asistente=True)
                 return
 
-            # CASO F: RESPUESTA DE FALLBACK
-            respuesta_fallback = (
-                f"Entiendo tu consulta sobre '{consulta}'. Como tu asistente IA de Finca El Puente, "
-                f"te comento que actualmente no tengo cargada información explícita sobre ese término. "
-                f"Intenta escribiendo el nombre de algún ejemplar registrado (como 'Hércules') "
-                f"o solicita estadísticas generales."
-            )
-            self.agregar_burbuja_texto(respuesta_fallback, es_asistente=True)
+            self.agregar_burbuja_texto(f"Como tu asistente IA de Finca El Puente, no tengo información explícita sobre '{consulta}'.", es_asistente=True)
 
         except Exception as e:
             self.agregar_burbuja_texto(f"❌ Error al consultar la IA: {e}", es_asistente=True)
