@@ -307,7 +307,7 @@ class AppGanado(ctk.CTk):
             # el QR codificará un enlace a la Ficha Móvil Oficial en la nube (GitHub Pages),
             # pasando los parámetros de forma segura para renderizar la tarjeta en el celular.
             url_ficha_movil = (
-                f"https://jraffy03.github.io/BD-II---Finca-el-Puente/ficha.html?" # <-- CAMBIA ESTO
+                f"https://jraffy03.github.io/BD-II---Finca-el-Puente/" # <-- CAMBIA ESTO
                 f"id={urllib.parse.quote(str(codigo))}&"
                 f"nombre={urllib.parse.quote(str(nombre))}&"
                 f"raza={urllib.parse.quote(str(raza))}&"
