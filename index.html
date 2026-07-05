@@ -3,152 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expediente Móvil - Finca El Puente</title>
-    <!-- Tailwind CSS para el diseño rápido y responsivo -->
+    <title>Ficha Ganadera | Finca El Puente</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome para iconos atractivos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f4f6f4;
         }
     </style>
-    <script>
-    const params = new URLSearchParams(window.location.search);
-
-    if (params.get("id")) {
-        window.location.href = "ficha.html?" + params.toString();
-    }
-
-    </script>
 </head>
-<body class="p-4 md:p-8 flex justify-center items-start min-h-screen">
 
-    <div class="w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden" id="card-container">
-        <!-- Banner Superior Principal -->
-        <div class="bg-gradient-to-br from-emerald-900 to-emerald-800 p-6 text-white text-center relative overflow-hidden">
-            <!-- Círculo estético decorativo de fondo -->
-            <div class="absolute -right-8 -top-8 w-24 h-24 bg-emerald-700 rounded-full opacity-30"></div>
-            
-            <i class="fa-solid fa-cow text-4xl mb-2 text-emerald-400"></i>
-            <h1 class="text-xs uppercase tracking-widest text-emerald-300 font-bold mb-1">Finca El Puente</h1>
-            <h2 id="lbl-nombre" class="text-2xl font-bold tracking-tight">Cargando datos...</h2>
-            <div id="lbl-id" class="inline-block mt-3 px-4 py-1.5 bg-emerald-950/50 backdrop-blur-sm rounded-full text-xs font-mono font-bold tracking-wider text-emerald-200">
-                ID: ---
-            </div>
-        </div>
+<body class="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-lime-50 p-4 md:p-8 flex justify-center items-start">
 
-        <!-- Cuerpo de Información Dinámica -->
-        <div class="p-6 space-y-5" id="data-body">
-            
-            <!-- Fila de Raza y Sexo -->
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-slate-50/80 p-3.5 rounded-2xl border border-slate-100/50 flex flex-col">
-                    <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-0.5">Raza</span>
-                    <span id="lbl-raza" class="font-semibold text-slate-800 text-sm md:text-base">-</span>
-                </div>
-                <div class="bg-slate-50/80 p-3.5 rounded-2xl border border-slate-100/50 flex flex-col">
-                    <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-0.5">Sexo</span>
-                    <span id="lbl-sexo" class="font-semibold text-slate-800 text-sm md:text-base">-</span>
-                </div>
-            </div>
+    <main class="w-full max-w-md">
 
-            <!-- Fila de Peso -->
-            <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-100/50 flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-700">
-                        <i class="fa-solid fa-weight-scale"></i>
+        <section id="card-container" class="bg-white rounded-[2rem] shadow-2xl border border-emerald-100 overflow-hidden">
+
+            <!-- Banner superior -->
+            <div class="relative bg-gradient-to-br from-emerald-950 via-emerald-900 to-green-800 p-7 text-white text-center overflow-hidden">
+
+                <div class="absolute -right-10 -top-10 w-32 h-32 bg-emerald-500 rounded-full opacity-20"></div>
+                <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-lime-400 rounded-full opacity-10"></div>
+
+                <div class="relative z-10">
+                    <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-4 border border-white/20">
+                        <i class="fa-solid fa-cow text-4xl text-emerald-300"></i>
                     </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Peso Registrado</span>
-                        <span id="lbl-peso" class="font-bold text-slate-800">-</span>
+
+                    <p class="text-xs uppercase tracking-[0.25em] text-emerald-300 font-bold mb-2">
+                        Registro Ganadero Oficial
+                    </p>
+
+                    <h1 id="lbl-nombre" class="text-3xl font-extrabold tracking-tight">
+                        Cargando...
+                    </h1>
+
+                    <div id="lbl-id" class="inline-block mt-4 px-4 py-2 bg-emerald-950/50 backdrop-blur-sm rounded-full text-xs font-mono font-bold tracking-wider text-emerald-200 border border-white/10">
+                        ID: ---
                     </div>
                 </div>
-                <span class="text-xs text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg font-medium">Báscula OK</span>
             </div>
 
-            <!-- Estado de Salud -->
-            <div class="space-y-2">
-                <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Condición Clínica</span>
-                <div id="lbl-estado-box" class="w-full text-center py-3.5 rounded-2xl font-bold uppercase text-xs tracking-wider border-2 transition-all duration-300">
-                    <span id="lbl-estado">-</span>
+            <!-- Cuerpo -->
+            <div class="p-6 space-y-5">
+
+                <!-- Datos principales -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div class="flex items-center gap-2 text-emerald-700 mb-1">
+                            <i class="fa-solid fa-dna text-sm"></i>
+                            <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Raza</p>
+                        </div>
+                        <p id="lbl-raza" class="font-bold text-slate-800">-</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div class="flex items-center gap-2 text-emerald-700 mb-1">
+                            <i class="fa-solid fa-venus-mars text-sm"></i>
+                            <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Sexo</p>
+                        </div>
+                        <p id="lbl-sexo" class="font-bold text-slate-800">-</p>
+                    </div>
+                </div>
+
+                <!-- Peso -->
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-700">
+                            <i class="fa-solid fa-weight-scale"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">
+                                Peso registrado
+                            </p>
+                            <p id="lbl-peso" class="font-extrabold text-slate-800 text-lg">
+                                -
+                            </p>
+                        </div>
+                    </div>
+
+                    <span class="text-xs text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl font-bold border border-emerald-100">
+                        Báscula OK
+                    </span>
+                </div>
+
+                <!-- Estado -->
+                <div>
+                    <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-2">
+                        Condición clínica actual
+                    </p>
+
+                    <div id="lbl-estado-box" class="w-full text-center py-4 rounded-2xl font-extrabold uppercase text-sm tracking-wider border-2 transition-all duration-300">
+                        <span id="lbl-estado">-</span>
+                    </div>
+                </div>
+
+                <!-- Ficha verificada -->
+                <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4">
+                    <div class="flex items-start gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-700 text-xl">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                        <div>
+                            <p class="text-sm font-extrabold text-emerald-900">
+                                Ficha verificada
+                            </p>
+                            <p class="text-xs text-emerald-700 mt-1 leading-relaxed">
+                                Información generada desde el sistema administrativo de Finca El Puente.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Observaciones -->
+                <div class="border-t border-slate-100 pt-5 space-y-2">
+                    <div class="flex items-center gap-2 text-slate-700 font-bold text-sm">
+                        <i class="fa-solid fa-clipboard-list text-emerald-600"></i>
+                        <span>Observaciones del ejemplar</span>
+                    </div>
+
+                    <p id="lbl-observaciones" class="text-xs text-gray-500 leading-relaxed italic">
+                        Sin observaciones adicionales.
+                    </p>
+                </div>
+
+                <!-- Resumen veterinario -->
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4">
+                    <div class="flex items-center gap-2 text-slate-700 font-bold text-sm mb-2">
+                        <i class="fa-solid fa-notes-medical text-emerald-600"></i>
+                        <span>Resumen de trazabilidad</span>
+                    </div>
+
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Este animal forma parte del programa de control ganadero de la Finca El Puente.
+                        Para consultar el historial completo de vacunas, alimentación y pesajes, revise la base de datos central del sistema administrativo.
+                    </p>
                 </div>
             </div>
 
-            <!-- Notas Adicionales -->
-            <div class="border-t border-slate-100 pt-5 space-y-2">
-                <div class="flex items-center space-x-2 text-slate-700 font-semibold text-sm">
-                    <i class="fa-solid fa-clipboard-check text-emerald-600"></i>
-                    <span>Trazabilidad Oficial</span>
-                </div>
-                <p class="text-xs text-gray-500 leading-relaxed italic">
-                    Este ejemplar cuenta con un chip de identificación homologado y forma parte activa del programa ganadero de precisión en Finca El Puente. Ante cualquier consulta epidemiológica, contacte a la administración.
+            <!-- Footer -->
+            <footer class="p-4 bg-slate-50 text-center border-t border-slate-100">
+                <p class="text-[10px] text-gray-400">
+                    © 2026 Finca El Puente | UTP Chiriquí
                 </p>
-            </div>
-        </div>
+                <p class="text-[10px] text-emerald-600 font-bold mt-1">
+                    Sistema de trazabilidad ganadera por QR
+                </p>
+            </footer>
+        </section>
 
-        <!-- Footer del Teléfono -->
-        <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
-            <p class="text-[10px] text-gray-400 font-medium">© 2026 Finca El Puente • Chiriquí, UTP</p>
-        </div>
-    </div>
+    </main>
 
     <script>
-        // Función principal para leer los parámetros de la URL
         function inicializarFicha() {
             const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.get('id');
 
-            // Si no se detectan parámetros (visita directa), mostramos una interfaz de bienvenida limpia
+            const id = urlParams.get("id");
+            const nombre = urlParams.get("nombre");
+            const raza = urlParams.get("raza");
+            const sexo = urlParams.get("sexo");
+            const peso = urlParams.get("peso");
+            const estado = urlParams.get("estado") || "Activo";
+            const observaciones = urlParams.get("obs");
+
             if (!id) {
-                document.getElementById('card-container').innerHTML = `
-                    <div class="bg-emerald-900 p-8 text-white text-center rounded-t-3xl">
-                        <i class="fa-solid fa-cow text-5xl mb-3 text-emerald-400"></i>
-                        <h1 class="text-2xl font-bold">Finca El Puente</h1>
-                        <p class="text-emerald-200 text-xs mt-1">Plataforma Móvil de Trazabilidad</p>
-                    </div>
-                    <div class="p-8 text-center space-y-4">
-                        <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto text-emerald-600">
-                            <i class="fa-solid fa-qrcode text-3xl"></i>
+                document.getElementById("card-container").innerHTML = `
+                    <div class="bg-emerald-900 p-8 text-white text-center">
+                        <div class="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fa-solid fa-qrcode text-4xl text-emerald-300"></i>
                         </div>
-                        <h3 class="font-bold text-slate-800 text-lg">Consulta por Código QR</h3>
-                        <p class="text-xs text-gray-500 leading-relaxed max-w-xs mx-auto">
-                            Por favor, escanea el código QR físico presente en el arete del animal para desplegar su ficha médica y su historial clínico actualizado.
+                        <h1 class="text-2xl font-extrabold">Ficha no encontrada</h1>
+                        <p class="text-emerald-200 text-sm mt-2">
+                            No se detectó un código válido de animal.
                         </p>
                     </div>
-                    <div class="p-4 bg-slate-50 text-center border-t border-slate-100 rounded-b-3xl">
-                        <p class="text-[10px] text-gray-400 font-medium">© 2026 Finca El Puente • Chiriquí, UTP</p>
+
+                    <div class="p-8 text-center">
+                        <p class="text-sm text-gray-500 leading-relaxed">
+                            Para visualizar una ficha ganadera, escanea un código QR generado desde el sistema administrativo de Finca El Puente.
+                        </p>
                     </div>
+
+                    <footer class="p-4 bg-slate-50 text-center border-t border-slate-100">
+                        <p class="text-[10px] text-gray-400">
+                            © 2026 Finca El Puente | UTP Chiriquí
+                        </p>
+                    </footer>
                 `;
                 return;
             }
 
-            // Si hay un ID, rellenamos la ficha dinámicamente con los parámetros del QR
-            document.getElementById('lbl-id').innerText = "ID: " + id;
-            document.getElementById('lbl-nombre').innerText = urlParams.get('nombre') || 'Ejemplar Finca';
-            document.getElementById('lbl-raza').innerText = urlParams.get('raza') || 'Brahman';
-            document.getElementById('lbl-sexo').innerText = urlParams.get('sexo') || 'Macho';
-            document.getElementById('lbl-peso').innerText = (urlParams.get('peso') || '0.00') + " Kg";
+            document.getElementById("lbl-id").innerText = "ID: " + id;
+            document.getElementById("lbl-nombre").innerText = nombre || "Ejemplar Finca";
+            document.getElementById("lbl-raza").innerText = raza || "No registrado";
+            document.getElementById("lbl-sexo").innerText = sexo || "No registrado";
+            document.getElementById("lbl-peso").innerText = (peso || "0.00") + " Kg";
+            document.getElementById("lbl-observaciones").innerText = observaciones || "Sin observaciones adicionales.";
 
-            const estado = urlParams.get('estado') || 'Activo';
-            const estadoElement = document.getElementById('lbl-estado');
-            const estadoBox = document.getElementById('lbl-estado-box');
+            const estadoElement = document.getElementById("lbl-estado");
+            const estadoBox = document.getElementById("lbl-estado-box");
 
             estadoElement.innerText = estado;
 
-            if (estado.toLowerCase() === 'activo' || estado.toLowerCase() === 'saludable') {
-                estadoBox.className = "w-full text-center py-3.5 rounded-2xl font-bold uppercase text-xs tracking-wider border-2 border-emerald-500 text-emerald-700 bg-emerald-50/50";
-            } else if (estado.toLowerCase() === 'enfermo') {
-                estadoBox.className = "w-full text-center py-3.5 rounded-2xl font-bold uppercase text-xs tracking-wider border-2 border-rose-500 text-rose-700 bg-rose-50/50";
+            const estadoLower = estado.toLowerCase();
+
+            if (estadoLower === "activo" || estadoLower === "saludable") {
+                estadoBox.className =
+                    "w-full text-center py-4 rounded-2xl font-extrabold uppercase text-sm tracking-wider border-2 border-emerald-500 text-emerald-700 bg-emerald-50";
+            } else if (estadoLower === "enfermo") {
+                estadoBox.className =
+                    "w-full text-center py-4 rounded-2xl font-extrabold uppercase text-sm tracking-wider border-2 border-rose-500 text-rose-700 bg-rose-50";
+            } else if (estadoLower === "vendido") {
+                estadoBox.className =
+                    "w-full text-center py-4 rounded-2xl font-extrabold uppercase text-sm tracking-wider border-2 border-blue-500 text-blue-700 bg-blue-50";
             } else {
-                estadoBox.className = "w-full text-center py-3.5 rounded-2xl font-bold uppercase text-xs tracking-wider border-2 border-amber-500 text-amber-700 bg-amber-50/50";
+                estadoBox.className =
+                    "w-full text-center py-4 rounded-2xl font-extrabold uppercase text-sm tracking-wider border-2 border-amber-500 text-amber-700 bg-amber-50";
             }
         }
 
         window.onload = inicializarFicha;
     </script>
+
 </body>
 </html>
-
