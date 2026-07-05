@@ -1,312 +1,146 @@
 <!DOCTYPE html>
-<html>
-<body>
-    <h1>Sistema Ganadero - Finca El Puente</h1>
-    <p>Bienvenido al sistema de gestión. Esta es la página informativa del proyecto.</p>
-</body>
-</html>
-
-<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Ganadero - Finca El Puente</title>
+    <title>Expediente Móvil - Finca El Puente</title>
+    <!-- Tailwind CSS para el diseño rápido y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para iconos atractivos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #2e7d32; /* Verde Ganadero */
-            --primary-dark: #1b5e20;
-            --accent-color: #4caf50;
-            --background: #f4f6f7;
-            --card-background: #ffffff;
-            --text-main: #2c3e50;
-            --text-muted: #7f8c8d;
-            --status-healthy: #2ecc71;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
-            background-color: var(--background);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-        }
-
-        /* Contenedor estilo Teléfono Móvil */
-        .phone-container {
-            width: 100%;
-            max-width: 412px; /* Tamaño típico de smartphone */
-            background-color: var(--card-background);
-            min-height: 100vh;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        /* Barra superior / Navbar */
-        .navbar {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            font-size: 1.2rem;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .navbar i {
-            margin-right: 14px;
-            cursor: pointer;
-        }
-
-        /* Contenido Principal */
-        .content {
-            padding: 20px;
-            flex: 1;
-        }
-
-        /* Estado del Escaneo / Buscador Superior */
-        .search-status-box {
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
-        }
-
-        .search-status-box h3 {
-            font-size: 1rem;
-            margin-bottom: 4px;
-            opacity: 0.9;
-        }
-
-        .search-status-box p {
-            font-size: 1.3rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        /* Tarjeta de Información */
-        .info-card {
-            background: var(--card-background);
-            border-radius: 16px;
-            border: 1px solid #e0e0e0;
-            padding: 20px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-        }
-
-        .card-title {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 6px;
-        }
-
-        /* Filas de Datos */
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f9f9f9;
-        }
-
-        .data-row:last-child {
-            border-bottom: none;
-        }
-
-        .data-label {
-            color: var(--text-muted);
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-        }
-
-        .data-label i {
-            margin-right: 10px;
-            width: 20px;
-            color: var(--primary-color);
-            text-align: center;
-        }
-
-        .data-value {
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        /* Badge de Estado */
-        .badge {
-            background-color: var(--status-healthy);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        /* Vista cuando no hay un animal seleccionado o error */
-        .error-view {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
-        }
-
-        .error-view i {
-            font-size: 3.5rem;
-            color: #e74c3c;
-            margin-bottom: 15px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f4f6f4;
         }
     </style>
 </head>
-<body>
+<body class="p-4 md:p-8 flex justify-center items-start min-h-screen">
 
-    <div class="phone-container">
-        <div class="navbar">
-            <i class="fas fa-bars"></i>
-            <span>Finca El Puente</span>
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden" id="card-container">
+        <!-- Banner Superior Principal -->
+        <div class="bg-gradient-to-br from-emerald-900 to-emerald-800 p-6 text-white text-center relative overflow-hidden">
+            <!-- Círculo estético decorativo de fondo -->
+            <div class="absolute -right-8 -top-8 w-24 h-24 bg-emerald-700 rounded-full opacity-30"></div>
+            
+            <i class="fa-solid fa-cow text-4xl mb-2 text-emerald-400"></i>
+            <h1 class="text-xs uppercase tracking-widest text-emerald-300 font-bold mb-1">Finca El Puente</h1>
+            <h2 id="lbl-nombre" class="text-2xl font-bold tracking-tight">Cargando datos...</h2>
+            <div id="lbl-id" class="inline-block mt-3 px-4 py-1.5 bg-emerald-950/50 backdrop-blur-sm rounded-full text-xs font-mono font-bold tracking-wider text-emerald-200">
+                ID: ---
+            </div>
         </div>
 
-        <div class="content" id="app-content">
-            <div class="error-view">
-                <i class="fas fa-qrcode"></i>
-                <p>Esperando escaneo de código QR...</p>
+        <!-- Cuerpo de Información Dinámica -->
+        <div class="p-6 space-y-5" id="data-body">
+            
+            <!-- Fila de Raza y Sexo -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-slate-50/80 p-3.5 rounded-2xl border border-slate-100/50 flex flex-col">
+                    <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-0.5">Raza</span>
+                    <span id="lbl-raza" class="font-semibold text-slate-800 text-sm md:text-base">-</span>
+                </div>
+                <div class="bg-slate-50/80 p-3.5 rounded-2xl border border-slate-100/50 flex flex-col">
+                    <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-0.5">Sexo</span>
+                    <span id="lbl-sexo" class="font-semibold text-slate-800 text-sm md:text-base">-</span>
+                </div>
             </div>
+
+            <!-- Fila de Peso -->
+            <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-100/50 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-700">
+                        <i class="fa-solid fa-weight-scale"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Peso Registrado</span>
+                        <span id="lbl-peso" class="font-bold text-slate-800">-</span>
+                    </div>
+                </div>
+                <span class="text-xs text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg font-medium">Báscula OK</span>
+            </div>
+
+            <!-- Estado de Salud -->
+            <div class="space-y-2">
+                <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Condición Clínica</span>
+                <div id="lbl-estado-box" class="w-full text-center py-3.5 rounded-2xl font-bold uppercase text-xs tracking-wider border-2 transition-all duration-300">
+                    <span id="lbl-estado">-</span>
+                </div>
+            </div>
+
+            <!-- Notas Adicionales -->
+            <div class="border-t border-slate-100 pt-5 space-y-2">
+                <div class="flex items-center space-x-2 text-slate-700 font-semibold text-sm">
+                    <i class="fa-solid fa-clipboard-check text-emerald-600"></i>
+                    <span>Trazabilidad Oficial</span>
+                </div>
+                <p class="text-xs text-gray-500 leading-relaxed italic">
+                    Este ejemplar cuenta con un chip de identificación homologado y forma parte activa del programa ganadero de precisión en Finca El Puente. Ante cualquier consulta epidemiológica, contacte a la administración.
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer del Teléfono -->
+        <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
+            <p class="text-[10px] text-gray-400 font-medium">© 2026 Finca El Puente • Chiriquí, UTP</p>
         </div>
     </div>
 
     <script>
-        // Base de datos local simulada directamente en el código
-        const baseDeDatosAnimales = {
-            "BHM-0001": {
-                nombre: "Toro Fuerte",
-                raza: "Brahman",
-                peso: "550 Kg",
-                ultimoPeso: "18/05/2025",
-                ultimaVacuna: "15/05/2025",
-                estado: "Saludable"
-            },
-            "BHM-0002": {
-                nombre: "Vaca Bella",
-                raza: "Gyr",
-                peso: "420 Kg",
-                ultimoPeso: "02/06/2026",
-                ultimaVacuna: "20/05/2026",
-                estado: "Saludable"
-            },
-            "BHM-0003": {
-                nombre: "Clavel",
-                raza: "Nelore",
-                peso: "490 Kg",
-                ultimoPeso: "14/06/2026",
-                ultimaVacuna: "10/04/2026",
-                estado: "En Observación"
-            }
-        };
-
-        // Función para obtener parámetros de la URL (ej: ?id=BHM-0001)
-        function obtenerParametroUrl(name) {
+        // Función principal para leer los parámetros de la URL
+        function inicializarFicha() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
+            const id = urlParams.get('id');
 
-        function renderizarInterfaz() {
-            const container = document.getElementById("app-content");
-            const animalId = obtenerParametroUrl("id");
-
-            if (!animalId) {
-                container.innerHTML = `
-                    <div class="error-view">
-                        <i class="fas fa-cow" style="color: var(--primary-color)"></i>
-                        <h2>Consulta Digital</h2>
-                        <p style="margin-top: 10px;">Por favor, escanee el código QR de un animal registrado para ver su ficha técnica.</p>
+            // Si no se detectan parámetros (visita directa), mostramos una interfaz de bienvenida limpia
+            if (!id) {
+                document.getElementById('card-container').innerHTML = `
+                    <div class="bg-emerald-900 p-8 text-white text-center rounded-t-3xl">
+                        <i class="fa-solid fa-cow text-5xl mb-3 text-emerald-400"></i>
+                        <h1 class="text-2xl font-bold">Finca El Puente</h1>
+                        <p class="text-emerald-200 text-xs mt-1">Plataforma Móvil de Trazabilidad</p>
+                    </div>
+                    <div class="p-8 text-center space-y-4">
+                        <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto text-emerald-600">
+                            <i class="fa-solid fa-qrcode text-3xl"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg">Consulta por Código QR</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed max-w-xs mx-auto">
+                            Por favor, escanea el código QR físico presente en el arete del animal para desplegar su ficha médica y su historial clínico actualizado.
+                        </p>
+                    </div>
+                    <div class="p-4 bg-slate-50 text-center border-t border-slate-100 rounded-b-3xl">
+                        <p class="text-[10px] text-gray-400 font-medium">© 2026 Finca El Puente • Chiriquí, UTP</p>
                     </div>
                 `;
                 return;
             }
 
-            const animal = baseDeDatosAnimales[animalId.toUpperCase()];
+            // Si hay un ID, rellenamos la ficha dinámicamente con los parámetros del QR
+            document.getElementById('lbl-id').innerText = "ID: " + id;
+            document.getElementById('lbl-nombre').innerText = urlParams.get('nombre') || 'Ejemplar Finca';
+            document.getElementById('lbl-raza').innerText = urlParams.get('raza') || 'Brahman';
+            document.getElementById('lbl-sexo').innerText = urlParams.get('sexo') || 'Macho';
+            document.getElementById('lbl-peso').innerText = (urlParams.get('peso') || '0.00') + " Kg";
 
-            if (animal) {
-                // Modifica el color de fondo del badge según el estado
-                let badgeColor = "var(--status-healthy)";
-                if(animal.estado.toLowerCase() === "en observación") {
-                    badgeColor = "#f39c12";
-                } else if(animal.estado.toLowerCase() === "enfermo") {
-                    badgeColor = "#e74c3c";
-                }
+            const estado = urlParams.get('estado') || 'Activo';
+            const estadoElement = document.getElementById('lbl-estado');
+            const estadoBox = document.getElementById('lbl-estado-box');
 
-                container.innerHTML = `
-                    <div class="search-status-box">
-                        <h3>Consulta por QR</h3>
-                        <p>${animalId.toUpperCase()}</p>
-                    </div>
+            estadoElement.innerText = estado;
 
-                    <div class="info-card">
-                        <div class="card-title">Información del Animal</div>
-                        
-                        <div class="data-row">
-                            <span class="data-label"><i class="fas fa-tag"></i> Nombre:</span>
-                            <span class="data-value">${animal.nombre}</span>
-                        </div>
-
-                        <div class="data-row">
-                            <span class="data-label"><i class="fas fa-dna"></i> Raza:</span>
-                            <span class="data-value">${animal.raza}</span>
-                        </div>
-
-                        <div class="data-row">
-                            <span class="data-label"><i class="fas fa-weight-hanging"></i> Peso Actual:</span>
-                            <span class="data-value">${animal.peso}</span>
-                        </div>
-
-                        <div class="data-row">
-                            <span class="data-label"><i class="fas fa-calendar-alt"></i> Último Peso:</span>
-                            <span class="data-value">${animal.ultimoPeso}</span>
-                        </div>
-
-                        <div class="data-row">
-                            <span class="data-label"><i class="fas fa-syringe"></i> Última Vacuna:</span>
-                            <span class="data-value">${animal.ultimaVacuna}</span>
-                        </div>
-
-                        <div class="data-row">
-                            <span class="data-label"><i class="fas fa-heartbeat"></i> Estado:</span>
-                            <span class="badge" style="background-color: ${badgeColor}">${animal.estado}</span>
-                        </div>
-                    </div>
-                `;
+            if (estado.toLowerCase() === 'activo' || estado.toLowerCase() === 'saludable') {
+                estadoBox.className = "w-full text-center py-3.5 rounded-2xl font-bold uppercase text-xs tracking-wider border-2 border-emerald-500 text-emerald-700 bg-emerald-50/50";
+            } else if (estado.toLowerCase() === 'enfermo') {
+                estadoBox.className = "w-full text-center py-3.5 rounded-2xl font-bold uppercase text-xs tracking-wider border-2 border-rose-500 text-rose-700 bg-rose-50/50";
             } else {
-                container.innerHTML = `
-                    <div class="error-view">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h2>No Registrado</h2>
-                        <p style="margin-top: 10px;">El código de animal <strong>"${animalId}"</strong> no existe en los registros actuales de Finca El Puente.</p>
-                    </div>
-                `;
+                estadoBox.className = "w-full text-center py-3.5 rounded-2xl font-bold uppercase text-xs tracking-wider border-2 border-amber-500 text-amber-700 bg-amber-50/50";
             }
         }
 
-        // Ejecutar al cargar la página
-        window.onload = renderizarInterfaz;
+        window.onload = inicializarFicha;
     </script>
 </body>
 </html>
+
