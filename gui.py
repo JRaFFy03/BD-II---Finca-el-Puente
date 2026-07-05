@@ -30,7 +30,7 @@ class AppGanado(ctk.CTk):
         self.configure(fg_color="#F4F6F4") # Fondo general sutil
         
         # ⚠️ CONFIGURACIÓN CLOUD: CORREGIDA CON TU USUARIO Y REPOSITORIO DE GITHUB
-        # Apuntamos a index.html en lugar de ficha.html para solucionar el error 404
+        # Apuntamos a index.html para solucionar el error 404
         self.github_user = "JRaFFy03" 
         self.github_repo = "BD-II---Finca-el-Puente"
         self.url_base_movil = f"https://{self.github_user}.github.io/{self.github_repo}/index.html"
@@ -306,15 +306,15 @@ class AppGanado(ctk.CTk):
                     self.ent_observaciones.delete(0, 'end')
                     self.ent_observaciones.insert(0, fila[9] if fila[9] else "")
 
-                    # Generar QR dinámico que apunta a tu web móvil con parámetros
-                    self.generar_qr_online(fila[0], fila[1], fila[2], fila[3], fila[6])
+                    # Generar QR dinámico que apunta a tu web móvil con parámetros (Incluimos Peso)
+                    self.generar_qr_online(fila[0], fila[1], fila[2], fila[3], f"{fila[5]:.2f}", fila[6])
             except Exception as e:
                 print(f"Error al cargar selección: {e}")
             finally:
                 cursor.close()
                 conn.close()
 
-    def generar_qr_online(self, codigo, nombre, raza, sexo, estado):
+    def generar_qr_online(self, codigo, nombre, raza, sexo, peso, estado):
         try:
             # Creamos la URL que recibirá la ficha web móvil (index.html) para renderizar los datos
             params = urllib.parse.urlencode({
@@ -322,6 +322,7 @@ class AppGanado(ctk.CTk):
                 "nombre": nombre,
                 "raza": raza,
                 "sexo": sexo,
+                "peso": peso,
                 "estado": estado
             })
             url_destino = f"{self.url_base_movil}?{params}"
@@ -1141,4 +1142,8 @@ class ChatbotWindow(ctk.CTkToplevel):
         finally:
             cursor.close()
             conn.close()
+
+
+
+
 
