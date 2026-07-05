@@ -15,6 +15,14 @@
             background-color: #f4f6f4;
         }
     </style>
+    <script>
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get("id")) {
+        window.location.href = "ficha.html?" + params.toString();
+    }
+
+    </script>
 </head>
 <body class="p-4 md:p-8 flex justify-center items-start min-h-screen">
 

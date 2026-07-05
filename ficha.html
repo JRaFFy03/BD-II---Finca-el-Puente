@@ -34,6 +34,12 @@
                 </div>
             </div>
 
+                <div class="bg-gray-50 p-3 rounded-2xl">
+                     <p class="text-[10px] text-gray-400 uppercase font-bold">Peso</p>
+                     <p id="lbl-peso" class="font-semibold text-gray-800">-</p>
+                </div>
+            </div>
+
             <!-- Estado Clínico -->
             <div>
                 <p class="text-xs text-gray-400 uppercase font-bold mb-2">Estado Clínico actual</p>
@@ -65,6 +71,7 @@
         document.getElementById('lbl-nombre').innerText = urlParams.get('nombre') || 'Sin Nombre';
         document.getElementById('lbl-raza').innerText = urlParams.get('raza') || 'N/A';
         document.getElementById('lbl-sexo').innerText = urlParams.get('sexo') || 'N/A';
+        document.getElementById('lbl-peso').innerText = (urlParams.get('peso') || '0.00') + " Kg";
         
         const estado = urlParams.get('estado') || 'Activo';
         const lblEstado = document.getElementById('lbl-estado');
