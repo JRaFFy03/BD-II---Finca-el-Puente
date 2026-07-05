@@ -5,3 +5,308 @@
     <p>Bienvenido al sistema de gestión. Esta es la página informativa del proyecto.</p>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Ganadero - Finca El Puente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2e7d32; /* Verde Ganadero */
+            --primary-dark: #1b5e20;
+            --accent-color: #4caf50;
+            --background: #f4f6f7;
+            --card-background: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #7f8c8d;
+            --status-healthy: #2ecc71;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        /* Contenedor estilo Teléfono Móvil */
+        .phone-container {
+            width: 100%;
+            max-width: 412px; /* Tamaño típico de smartphone */
+            background-color: var(--card-background);
+            min-height: 100vh;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Barra superior / Navbar */
+        .navbar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .navbar i {
+            margin-right: 14px;
+            cursor: pointer;
+        }
+
+        /* Contenido Principal */
+        .content {
+            padding: 20px;
+            flex: 1;
+        }
+
+        /* Estado del Escaneo / Buscador Superior */
+        .search-status-box {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+        }
+
+        .search-status-box h3 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+            opacity: 0.9;
+        }
+
+        .search-status-box p {
+            font-size: 1.3rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Tarjeta de Información */
+        .info-card {
+            background: var(--card-background);
+            border-radius: 16px;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 6px;
+        }
+
+        /* Filas de Datos */
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f9f9f9;
+        }
+
+        .data-row:last-child {
+            border-bottom: none;
+        }
+
+        .data-label {
+            color: var(--text-muted);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .data-label i {
+            margin-right: 10px;
+            width: 20px;
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        .data-value {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Badge de Estado */
+        .badge {
+            background-color: var(--status-healthy);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        /* Vista cuando no hay un animal seleccionado o error */
+        .error-view {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .error-view i {
+            font-size: 3.5rem;
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-container">
+        <div class="navbar">
+            <i class="fas fa-bars"></i>
+            <span>Finca El Puente</span>
+        </div>
+
+        <div class="content" id="app-content">
+            <div class="error-view">
+                <i class="fas fa-qrcode"></i>
+                <p>Esperando escaneo de código QR...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos local simulada directamente en el código
+        const baseDeDatosAnimales = {
+            "BHM-0001": {
+                nombre: "Toro Fuerte",
+                raza: "Brahman",
+                peso: "550 Kg",
+                ultimoPeso: "18/05/2025",
+                ultimaVacuna: "15/05/2025",
+                estado: "Saludable"
+            },
+            "BHM-0002": {
+                nombre: "Vaca Bella",
+                raza: "Gyr",
+                peso: "420 Kg",
+                ultimoPeso: "02/06/2026",
+                ultimaVacuna: "20/05/2026",
+                estado: "Saludable"
+            },
+            "BHM-0003": {
+                nombre: "Clavel",
+                raza: "Nelore",
+                peso: "490 Kg",
+                ultimoPeso: "14/06/2026",
+                ultimaVacuna: "10/04/2026",
+                estado: "En Observación"
+            }
+        };
+
+        // Función para obtener parámetros de la URL (ej: ?id=BHM-0001)
+        function obtenerParametroUrl(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function renderizarInterfaz() {
+            const container = document.getElementById("app-content");
+            const animalId = obtenerParametroUrl("id");
+
+            if (!animalId) {
+                container.innerHTML = `
+                    <div class="error-view">
+                        <i class="fas fa-cow" style="color: var(--primary-color)"></i>
+                        <h2>Consulta Digital</h2>
+                        <p style="margin-top: 10px;">Por favor, escanee el código QR de un animal registrado para ver su ficha técnica.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const animal = baseDeDatosAnimales[animalId.toUpperCase()];
+
+            if (animal) {
+                // Modifica el color de fondo del badge según el estado
+                let badgeColor = "var(--status-healthy)";
+                if(animal.estado.toLowerCase() === "en observación") {
+                    badgeColor = "#f39c12";
+                } else if(animal.estado.toLowerCase() === "enfermo") {
+                    badgeColor = "#e74c3c";
+                }
+
+                container.innerHTML = `
+                    <div class="search-status-box">
+                        <h3>Consulta por QR</h3>
+                        <p>${animalId.toUpperCase()}</p>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="card-title">Información del Animal</div>
+                        
+                        <div class="data-row">
+                            <span class="data-label"><i class="fas fa-tag"></i> Nombre:</span>
+                            <span class="data-value">${animal.nombre}</span>
+                        </div>
+
+                        <div class="data-row">
+                            <span class="data-label"><i class="fas fa-dna"></i> Raza:</span>
+                            <span class="data-value">${animal.raza}</span>
+                        </div>
+
+                        <div class="data-row">
+                            <span class="data-label"><i class="fas fa-weight-hanging"></i> Peso Actual:</span>
+                            <span class="data-value">${animal.peso}</span>
+                        </div>
+
+                        <div class="data-row">
+                            <span class="data-label"><i class="fas fa-calendar-alt"></i> Último Peso:</span>
+                            <span class="data-value">${animal.ultimoPeso}</span>
+                        </div>
+
+                        <div class="data-row">
+                            <span class="data-label"><i class="fas fa-syringe"></i> Última Vacuna:</span>
+                            <span class="data-value">${animal.ultimaVacuna}</span>
+                        </div>
+
+                        <div class="data-row">
+                            <span class="data-label"><i class="fas fa-heartbeat"></i> Estado:</span>
+                            <span class="badge" style="background-color: ${badgeColor}">${animal.estado}</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="error-view">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h2>No Registrado</h2>
+                        <p style="margin-top: 10px;">El código de animal <strong>"${animalId}"</strong> no existe en los registros actuales de Finca El Puente.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Ejecutar al cargar la página
+        window.onload = renderizarInterfaz;
+    </script>
+</body>
+</html>
