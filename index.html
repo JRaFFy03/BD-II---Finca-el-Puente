@@ -3,232 +3,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ficha Ganadera | Finca El Puente</title>
-
+    <title>Portal Ganadero - Finca El Puente</title>
+    <!-- Tailwind CSS para diseño responsivo moderno -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
+    <!-- FontAwesome para iconos de alta calidad -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f4f6f4;
         }
     </style>
 </head>
+<body class="min-h-screen text-slate-800 pb-12">
 
-<body class="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-lime-50 p-4 md:p-8 flex justify-center items-start">
+    <!-- BARRA DE NAVEGACIÓN -->
+    <nav class="bg-emerald-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="irAlHome()">
+                <div class="bg-emerald-800 p-2.5 rounded-xl text-emerald-400">
+                    <i class="fa-solid fa-cow text-2xl"></i>
+                </div>
+                <div>
+                    <span class="text-lg font-bold block tracking-tight">Finca El Puente</span>
+                    <span class="text-[10px] text-emerald-300 font-bold uppercase tracking-widest">Trazabilidad Inteligente</span>
+                </div>
+            </div>
+            <div class="hidden sm:flex items-center space-x-2 text-xs bg-emerald-950/50 px-3 py-1.5 rounded-full text-emerald-200">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Servidor en línea (GitHub Pages)</span>
+            </div>
+        </div>
+    </nav>
 
-    <main class="w-full max-w-md">
-
-        <section id="card-container" class="bg-white rounded-[2rem] shadow-2xl border border-emerald-100 overflow-hidden">
-
-            <!-- Banner superior -->
-            <div class="relative bg-gradient-to-br from-emerald-950 via-emerald-900 to-green-800 p-7 text-white text-center overflow-hidden">
-
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-emerald-500 rounded-full opacity-20"></div>
-                <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-lime-400 rounded-full opacity-10"></div>
-
-                <div class="relative z-10">
-                    <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-4 border border-white/20">
-                        <i class="fa-solid fa-cow text-4xl text-emerald-300"></i>
-                    </div>
-
-                    <p class="text-xs uppercase tracking-[0.25em] text-emerald-300 font-bold mb-2">
-                        Registro Ganadero Oficial
-                    </p>
-
-                    <h1 id="lbl-nombre" class="text-3xl font-extrabold tracking-tight">
-                        Cargando...
-                    </h1>
-
-                    <div id="lbl-id" class="inline-block mt-4 px-4 py-2 bg-emerald-950/50 backdrop-blur-sm rounded-full text-xs font-mono font-bold tracking-wider text-emerald-200 border border-white/10">
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        
+        <!-- VISTA 1: FICHA INDIVIDUAL (Se activa si hay un ID en la URL) -->
+        <section id="vista-ficha" class="hidden max-w-md mx-auto">
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+                <!-- Banner Superior -->
+                <div class="bg-gradient-to-br from-emerald-900 to-emerald-800 p-6 text-white text-center relative overflow-hidden">
+                    <div class="absolute -right-8 -top-8 w-24 h-24 bg-emerald-700 rounded-full opacity-30"></div>
+                    <i class="fa-solid fa-circle-info text-4xl mb-2 text-emerald-400"></i>
+                    <h1 class="text-xs uppercase tracking-widest text-emerald-300 font-bold mb-1">Ficha Informativa Móvil</h1>
+                    <h2 id="lbl-nombre" class="text-2xl font-bold tracking-tight">---</h2>
+                    <div id="lbl-id" class="inline-block mt-3 px-4 py-1.5 bg-emerald-950/50 backdrop-blur-sm rounded-full text-xs font-mono font-bold tracking-wider text-emerald-200">
                         ID: ---
                     </div>
                 </div>
+
+                <!-- Detalles de la Ficha -->
+                <div class="p-6 space-y-5">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100/50 flex flex-col">
+                            <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-0.5">Raza</span>
+                            <span id="lbl-raza" class="font-semibold text-slate-800 text-sm">-</span>
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100/50 flex flex-col">
+                            <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-0.5">Sexo / Tipo</span>
+                            <span id="lbl-sexo" class="font-semibold text-slate-800 text-sm">-</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100/50 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-9 h-9 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-700">
+                                <i class="fa-solid fa-weight-scale"></i>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Peso Registrado</span>
+                                <span id="lbl-peso" class="font-bold text-slate-800">-</span>
+                            </div>
+                        </div>
+                        <span class="text-xs text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg font-medium">Báscula OK</span>
+                    </div>
+
+                    <div class="space-y-2">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Condición Clínica</span>
+                        <div id="lbl-estado-box" class="w-full text-center py-3.5 rounded-2xl font-bold uppercase text-xs tracking-wider border-2 transition-all duration-300">
+                            <span id="lbl-estado">-</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-5 space-y-2">
+                        <div class="flex items-center space-x-2 text-slate-700 font-semibold text-sm">
+                            <i class="fa-solid fa-clipboard-check text-emerald-600"></i>
+                            <span>Observaciones Veterinarias</span>
+                        </div>
+                        <p id="lbl-obs" class="text-xs text-gray-500 leading-relaxed italic">
+                            Este ejemplar forma parte activa del programa de control ganadero automatizado. La información ha sido validada directamente desde la base de datos de administración.
+                        </p>
+                    </div>
+
+                    <!-- Botón para ver todo el catálogo -->
+                    <button onclick="irAlHome()" class="w-full py-3.5 mt-4 bg-emerald-800 hover:bg-emerald-950 text-white font-bold rounded-2xl text-xs uppercase tracking-wider transition shadow-lg flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Ver todo el catálogo</span>
+                    </button>
+                </div>
             </div>
+        </section>
 
-            <!-- Cuerpo -->
-            <div class="p-6 space-y-5">
-
-                <!-- Datos principales -->
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                        <div class="flex items-center gap-2 text-emerald-700 mb-1">
-                            <i class="fa-solid fa-dna text-sm"></i>
-                            <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Raza</p>
-                        </div>
-                        <p id="lbl-raza" class="font-bold text-slate-800">-</p>
-                    </div>
-
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                        <div class="flex items-center gap-2 text-emerald-700 mb-1">
-                            <i class="fa-solid fa-venus-mars text-sm"></i>
-                            <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Sexo</p>
-                        </div>
-                        <p id="lbl-sexo" class="font-bold text-slate-800">-</p>
-                    </div>
-                </div>
-
-                <!-- Peso -->
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-700">
-                            <i class="fa-solid fa-weight-scale"></i>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">
-                                Peso registrado
-                            </p>
-                            <p id="lbl-peso" class="font-extrabold text-slate-800 text-lg">
-                                -
-                            </p>
-                        </div>
-                    </div>
-
-                    <span class="text-xs text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl font-bold border border-emerald-100">
-                        Báscula OK
-                    </span>
-                </div>
-
-                <!-- Estado -->
-                <div>
-                    <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-2">
-                        Condición clínica actual
-                    </p>
-
-                    <div id="lbl-estado-box" class="w-full text-center py-4 rounded-2xl font-extrabold uppercase text-sm tracking-wider border-2 transition-all duration-300">
-                        <span id="lbl-estado">-</span>
-                    </div>
-                </div>
-
-                <!-- Ficha verificada -->
-                <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4">
-                    <div class="flex items-start gap-3">
-                        <div class="w-11 h-11 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-700 text-xl">
-                            <i class="fa-solid fa-circle-check"></i>
-                        </div>
-
-                        <div>
-                            <p class="text-sm font-extrabold text-emerald-900">
-                                Ficha verificada
-                            </p>
-                            <p class="text-xs text-emerald-700 mt-1 leading-relaxed">
-                                Información generada desde el sistema administrativo de Finca El Puente.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Observaciones -->
-                <div class="border-t border-slate-100 pt-5 space-y-2">
-                    <div class="flex items-center gap-2 text-slate-700 font-bold text-sm">
-                        <i class="fa-solid fa-clipboard-list text-emerald-600"></i>
-                        <span>Observaciones del ejemplar</span>
-                    </div>
-
-                    <p id="lbl-observaciones" class="text-xs text-gray-500 leading-relaxed italic">
-                        Sin observaciones adicionales.
+        <!-- VISTA 2: CATÁLOGO GENERAL (Se activa si no hay ID en la URL o al presionar regresar) -->
+        <section id="vista-catalogo" class="space-y-6">
+            
+            <!-- TARJETA INFORMATIVA / ESTADÍSTICAS -->
+            <div class="bg-gradient-to-r from-emerald-900 to-emerald-950 text-white p-6 sm:p-8 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden">
+                <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-emerald-800 rounded-full opacity-20"></div>
+                <div class="z-10 space-y-2 max-w-lg">
+                    <h2 class="text-2xl sm:text-3xl font-bold tracking-tight">Catálogo General de Ganado</h2>
+                    <p class="text-emerald-200 text-xs sm:text-sm leading-relaxed">
+                        Explora las fichas técnicas, condiciones clínicas y trazabilidad individual de todos los ejemplares bovinos registrados en el sistema de Finca El Puente.
                     </p>
                 </div>
-
-                <!-- Resumen veterinario -->
-                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4">
-                    <div class="flex items-center gap-2 text-slate-700 font-bold text-sm mb-2">
-                        <i class="fa-solid fa-notes-medical text-emerald-600"></i>
-                        <span>Resumen de trazabilidad</span>
+                <div class="z-10 mt-6 md:mt-0 flex space-x-4 bg-emerald-950/40 p-4 rounded-2xl backdrop-blur-sm border border-emerald-800">
+                    <div class="text-center px-4 border-r border-emerald-800">
+                        <span id="stat-total" class="block text-2xl font-bold text-emerald-400">0</span>
+                        <span class="text-[9px] uppercase tracking-wider text-emerald-300 font-semibold">Total</span>
                     </div>
-
-                    <p class="text-xs text-gray-500 leading-relaxed">
-                        Este animal forma parte del programa de control ganadero de la Finca El Puente.
-                        Para consultar el historial completo de vacunas, alimentación y pesajes, revise la base de datos central del sistema administrativo.
-                    </p>
+                    <div class="text-center px-4">
+                        <span id="stat-saludables" class="block text-2xl font-bold text-emerald-400">0</span>
+                        <span class="text-[9px] uppercase tracking-wider text-emerald-300 font-semibold">Saludables</span>
+                    </div>
+                    
                 </div>
             </div>
 
-            <!-- Footer -->
-            <footer class="p-4 bg-slate-50 text-center border-t border-slate-100">
-                <p class="text-[10px] text-gray-400">
-                    © 2026 Finca El Puente | UTP Chiriquí
-                </p>
-                <p class="text-[10px] text-emerald-600 font-bold mt-1">
-                    Sistema de trazabilidad ganadera por QR
-                </p>
-            </footer>
+            <!-- CONTROLES DE BÚSQUEDA Y FILTRADO -->
+            <div class="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 flex flex-col lg:flex-row gap-4 items-center">
+                <!-- Buscador por nombre/ID -->
+                <div class="w-full lg:flex-1 relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-400"></i>
+                    <input type="text" id="txt-busqueda" placeholder="Buscar por ID, nombre o raza..." class="w-full pl-11 pr-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" onkeyup="filtrarYMostrar()">
+                </div>
+                <!-- Filtro de Raza -->
+                <div class="w-full lg:w-44">
+                    <select id="filtro-raza" class="w-full py-3 px-4 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition cursor-pointer" onchange="filtrarYMostrar()">
+                        <option value="">Todas las Razas</option>
+                        <option value="Brahman Gris">Brahman Gris</option>
+                        <option value="Brahman Rojo">Brahman Rojo</option>
+                        <option value="Gyr">Gyr</option>
+                        <option value="Nelore">Nelore</option>
+                        <option value="Pardo Suizo">Pardo Suizo</option>
+                    </select>
+                </div>
+                <!-- Filtro de Sexo / Tipo -->
+                <div class="w-full lg:w-44">
+                    <select id="filtro-sexo" class="w-full py-3 px-4 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition cursor-pointer" onchange="filtrarYMostrar()">
+                        <option value="">Todos los Tipos</option>
+                        <option value="Macho">Machos (Toros)</option>
+                        <option value="Hembra">Hembras (Vacas)</option>
+                    </select>
+                </div>
+                <!-- Filtro de Estado Clínico -->
+                <div class="w-full lg:w-44">
+                    <select id="filtro-estado" class="w-full py-3 px-4 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition cursor-pointer" onchange="filtrarYMostrar()">
+                        <option value="">Todos los Estados</option>
+                        <option value="Saludable">Saludable</option>
+                        <option value="Activo">Activo</option>
+                        <option value="En Observación">En Observación</option>
+                        <option value="Enfermo">Enfermo</option>
+                    </select>
+                </div>
+                <!-- Ordenación Alfabética -->
+                <button onclick="alternarOrden()" class="w-full lg:w-auto px-5 py-3 rounded-2xl bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 text-emerald-800 font-semibold text-sm transition flex items-center justify-center space-x-2">
+                    <i id="icono-orden" class="fa-solid fa-arrow-down-a-z"></i>
+                    <span id="lbl-orden">A - Z</span>
+                </button>
+            </div>
+
+            <!-- GRILLA DE TARJETAS DE ANIMALES -->
+            <div id="grid-ganado" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Tarjetas inyectadas dinámicamente por JS -->
+            </div>
+
+            <!-- Estado Vacío -->
+            <div id="sin-resultados" class="hidden text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                <i class="fa-solid fa-magnifying-glass-chart text-5xl text-gray-300 mb-4 block"></i>
+                <h3 class="text-base font-bold text-slate-800">No se encontraron ejemplares</h3>
+                <p class="text-xs text-gray-400 mt-1 max-w-xs mx-auto">Prueba ajustando los filtros o cambiando el término de tu búsqueda.</p>
+            </div>
         </section>
 
     </main>
 
     <script>
-        function inicializarFicha() {
+        // BASE DE DATOS DE RESPALDO (Focalizada en los datos del proyecto)
+        const baseDatosGanadera = [
+            { id: "BHM-0001", nombre: "Toro Fuerte", raza: "Brahman Gris", sexo: "Macho", peso: "550", estado: "Saludable" },
+            { id: "BHM-0002", nombre: "Vaca Bella", raza: "Gyr", sexo: "Hembra", peso: "420", estado: "Saludable" },
+            { id: "BHM-0003", nombre: "Clavel", raza: "Nelore", sexo: "Hembra", peso: "490", estado: "En Observación" }
+        ];
+
+        let ordenAscendente = true;
+
+        // FUNCIÓN PRINCIPAL AL CARGAR LA PÁGINA
+        function evaluarRuta() {
             const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
 
-            const id = urlParams.get("id");
-            const nombre = urlParams.get("nombre");
-            const raza = urlParams.get("raza");
-            const sexo = urlParams.get("sexo");
-            const peso = urlParams.get("peso");
-            const estado = urlParams.get("estado") || "Activo";
-            const observaciones = urlParams.get("obs");
+            if (id) {
+                // Modo Ficha Individual
+                document.getElementById('vista-catalogo').classList.add('hidden');
+                document.getElementById('vista-ficha').classList.remove('hidden');
+                
+                // Rellenamos los campos con los datos de la URL (Tolerante a nuevos registros dinámicos)
+                const nombre = urlParams.get('nombre') || 'Ejemplar Registrado';
+                const raza = urlParams.get('raza') || 'Brahman Gris';
+                const sexo = urlParams.get('sexo') || 'Macho';
+                const peso = urlParams.get('peso') || '0.00';
+                const estado = urlParams.get('estado') || 'Saludable';
+                const obs = urlParams.get('obs') || 'Este ejemplar forma parte activa del programa de control ganadero automatizado. La información ha sido validada directamente desde la base de datos de administración.';
 
-            if (!id) {
-                document.getElementById("card-container").innerHTML = `
-                    <div class="bg-emerald-900 p-8 text-white text-center">
-                        <div class="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center mx-auto mb-4">
-                            <i class="fa-solid fa-qrcode text-4xl text-emerald-300"></i>
-                        </div>
-                        <h1 class="text-2xl font-extrabold">Ficha no encontrada</h1>
-                        <p class="text-emerald-200 text-sm mt-2">
-                            No se detectó un código válido de animal.
-                        </p>
-                    </div>
+                document.getElementById('lbl-id').innerText = "ID: " + id;
+                document.getElementById('lbl-nombre').innerText = nombre;
+                document.getElementById('lbl-raza').innerText = raza;
+                document.getElementById('lbl-sexo').innerText = sexo;
+                document.getElementById('lbl-peso').innerText = peso + " Kg";
+                document.getElementById('lbl-obs').innerText = obs;
+                
+                const estadoElement = document.getElementById('lbl-estado');
+                const estadoBox = document.getElementById('lbl-estado-box');
+                estadoElement.innerText = estado;
 
-                    <div class="p-8 text-center">
-                        <p class="text-sm text-gray-500 leading-relaxed">
-                            Para visualizar una ficha ganadera, escanea un código QR generado desde el sistema administrativo de Finca El Puente.
-                        </p>
-                    </div>
-
-                    <footer class="p-4 bg-slate-50 text-center border-t border-slate-100">
-                        <p class="text-[10px] text-gray-400">
-                            © 2026 Finca El Puente | UTP Chiriquí
-                        </p>
-                    </footer>
-                `;
-                return;
-            }
-
-            document.getElementById("lbl-id").innerText = "ID: " + id;
-            document.getElementById("lbl-nombre").innerText = nombre || "Ejemplar Finca";
-            document.getElementById("lbl-raza").innerText = raza || "No registrado";
-            document.getElementById("lbl-sexo").innerText = sexo || "No registrado";
-            document.getElementById("lbl-peso").innerText = (peso || "0.00") + " Kg";
-            document.getElementById("lbl-observaciones").innerText = observaciones || "Sin observaciones adicionales.";
-
-            const estadoElement = document.getElementById("lbl-estado");
-            const estadoBox = document.getElementById("lbl-estado-box");
-
-            estadoElement.innerText = estado;
-
-            const estadoLower = estado.toLowerCase();
-
-            if (estadoLower === "activo" || estadoLower === "saludable") {
-                estadoBox.className =
-                    "w-full text-center py-4 rounded-2xl font-extrabold uppercase text-sm tracking-wider border-2 border-emerald-500 text-emerald-700 bg-emerald-50";
-            } else if (estadoLower === "enfermo") {
-                estadoBox.className =
-                    "w-full text-center py-4 rounded-2xl font-extrabold uppercase text-sm tracking-wider border-2 border-rose-500 text-rose-700 bg-rose-50";
-            } else if (estadoLower === "vendido") {
-                estadoBox.className =
-                    "w-full text-center py-4 rounded-2xl font-extrabold uppercase text-sm tracking-wider border-2 border-blue-500 text-blue-700 bg-blue-50";
+                // Estilos personalizados según la condición clínica
+                if (estado.toLowerCase() === 'saludable' || estado.toLowerCase() === 'activo') {
+                    estadoBox.className = "w-full text-center py-3.5 rounded-2xl font-bold uppercase text-xs tracking-wider border-2 border-emerald-500 text-emerald-700 bg-emerald-50/50";
+                } else if (estado.toLowerCase() === 'enfermo') {
+                    estadoBox.className = "w-full text-center py-3.5 rounded-2xl font-bold uppercase text-xs tracking-wider border-2 border-rose-500 text-rose-700 bg-rose-50/50";
+                } else {
+                    estadoBox.className = "w-full text-center py-3.5 rounded-2xl font-bold uppercase text-xs tracking-wider border-2 border-amber-500 text-amber-700 bg-amber-50/50";
+                }
             } else {
-                estadoBox.className =
-                    "w-full text-center py-4 rounded-2xl font-extrabold uppercase text-sm tracking-wider border-2 border-amber-500 text-amber-700 bg-amber-50";
+                // Modo Catálogo General
+                document.getElementById('vista-ficha').classList.add('hidden');
+                document.getElementById('vista-catalogo').classList.remove('hidden');
+                actualizarEstadisticas();
+                filtrarYMostrar();
             }
         }
 
-        window.onload = inicializarFicha;
+        // RENDERIZADOR DE ESTADÍSTICAS
+        function actualizarEstadisticas() {
+            document.getElementById('stat-total').innerText = baseDatosGanadera.length;
+            const saludables = baseDatosGanadera.filter(a => a.estado.toLowerCase() === 'saludable' || a.estado.toLowerCase() === 'activo').length;
+            document.getElementById('stat-saludables').innerText = saludables;
+        }
+
+        // FILTRADO, BÚSQUEDA Y RENDERIZACIÓN
+        function filtrarYMostrar() {
+            const busqueda = document.getElementById('txt-busqueda').value.toLowerCase();
+            const razaFiltro = document.getElementById('filtro-raza').value;
+            const sexoFiltro = document.getElementById('filtro-sexo').value;
+            const estadoFiltro = document.getElementById('filtro-estado').value;
+
+            let filtrados = baseDatosGanadera.filter(animal => {
+                const coincideBusqueda = animal.id.toLowerCase().includes(busqueda) || 
+                                         animal.nombre.toLowerCase().includes(busqueda) || 
+                                         animal.raza.toLowerCase().includes(busqueda);
+                const coincideRaza = razaFiltro === "" || animal.raza === razaFiltro;
+                const coincideSexo = sexoFiltro === "" || animal.sexo === sexoFiltro;
+                const coincideEstado = estadoFiltro === "" || animal.estado === estadoFiltro;
+
+                return coincideBusqueda && coincideRaza && coincideSexo && coincideEstado;
+            });
+
+            // Ordenación alfabética por nombre
+            filtrados.sort((a, b) => {
+                if (ordenAscendente) {
+                    return a.nombre.localeCompare(b.nombre);
+                } else {
+                    return b.nombre.localeCompare(a.nombre);
+                }
+            });
+
+            // Pintar tarjetas
+            const grid = document.getElementById('grid-ganado');
+            grid.innerHTML = "";
+
+            if (filtrados.length === 0) {
+                document.getElementById('sin-resultados').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('sin-resultados').classList.add('hidden');
+            }
+
+            filtrados.forEach(animal => {
+                // Estilo dinámico de estado en catálogo
+                let badgeClass = "bg-emerald-50 text-emerald-700 border-emerald-100";
+                if (animal.estado.toLowerCase() === 'enfermo') {
+                    badgeClass = "bg-rose-50 text-rose-700 border-rose-100";
+                } else if (animal.estado.toLowerCase() === 'en observación') {
+                    badgeClass = "bg-amber-50 text-amber-700 border-amber-100";
+                }
+
+                const urlVerFicha = `?id=${animal.id}&nombre=${encodeURIComponent(animal.nombre)}&raza=${encodeURIComponent(animal.raza)}&sexo=${encodeURIComponent(animal.sexo)}&peso=${animal.peso}&estado=${encodeURIComponent(animal.estado)}`;
+
+                grid.innerHTML += `
+                    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition duration-300 p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-[10px] font-mono font-bold tracking-widest text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase">${animal.id}</span>
+                                <span class="text-[10px] font-bold border px-2.5 py-1 rounded-full uppercase ${badgeClass}">${animal.estado}</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-1">${animal.nombre}</h3>
+                            <p class="text-xs text-gray-400 mb-4 flex items-center">
+                                <i class="fa-solid fa-dna mr-1 text-emerald-600"></i> ${animal.raza} • ${animal.sexo}
+                            </p>
+                            <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100/50 flex justify-between items-center mb-4">
+                                <span class="text-xs text-gray-400 font-semibold">Peso Registrado:</span>
+                                <span class="text-sm font-bold text-slate-800">${animal.peso} Kg</span>
+                            </div>
+                        </div>
+                        <a href="${urlVerFicha}" class="w-full py-3 bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 font-bold rounded-2xl text-xs uppercase tracking-wider text-center transition flex items-center justify-center space-x-2 border border-slate-100 hover:border-emerald-100">
+                            <span>Ver Expediente Móvil</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+                `;
+            });
+        }
+
+        // CONTROLADORES DE RUTA
+        function irAlHome() {
+            window.history.pushState({}, '', window.location.pathname);
+            evaluarRuta();
+        }
+
+        function alternarOrden() {
+            ordenAscendente = !ordenAscendente;
+            document.getElementById('lbl-orden').innerText = ordenAscendente ? "A - Z" : "Z - A";
+            document.getElementById('icono-orden').className = ordenAscendente ? "fa-solid fa-arrow-down-a-z" : "fa-solid fa-arrow-up-z-a";
+            filtrarYMostrar();
+        }
+
+        // Evaluar ruta en el arranque y en la navegación de regreso del navegador
+        window.onpopstate = evaluarRuta;
+        window.onload = evaluarRuta;
     </script>
 
 </body>
