@@ -57,7 +57,7 @@ class AppGanado(ctk.CTk):
         # =============================================================
         self.github_user = "JRaFFy03"
         self.github_repo = "BD-II---Finca-el-Puente"
-        self.url_base_movil = f"https://{self.github_user}.github.io/{self.github_repo}/index.html"
+        self.url_base_movil = f"https://jraffy03.github.io/BD-II---Finca-el-Puente/index.html"
         
         # =============================================================
         # FUENTES DEL SISTEMA
