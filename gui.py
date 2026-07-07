@@ -53,7 +53,7 @@ class AppGanado(ctk.CTk):
         
         # =============================================================
         # CONFIGURACIÓN DE GITHUB PAGES PARA LA FICHA MÓVIL
-        # IMPORTANTE: CAMBIADO A index.html PARA INTEGRAR AL NUEVO PORTAL
+        # ENLACE FIJO DIRECTO AL PORTAL GENERAL DE INDEX.HTML
         # =============================================================
         self.github_user = "JRaFFy03"
         self.github_repo = "BD-II---Finca-el-Puente"
@@ -69,15 +69,15 @@ class AppGanado(ctk.CTk):
         self.font_pequena = ctk.CTkFont(family="Segoe UI", size=11)
         
         # =============================================================
-        # VARIABLES TEMPORALES PARA QR
+        # VARIABLES TEMPORALES PARA QR (AHORA APUNTAN AL PORTAL FIJO)
         # =============================================================
         self.qr_temp_data = None
-        self.qr_temp_codigo = None
-        self.url_ultimo_qr = None
+        self.qr_temp_codigo = "Portal_General"
+        self.url_ultimo_qr = self.url_base_movil
         self.img_qr = None
         
         # =============================================================
-        # ESTILO DE TABLAS
+        # ESTILO DE TABLAS Y MENÚS
         # =============================================================
         self.configurar_estilo_tablas()
         
@@ -619,12 +619,12 @@ class AppGanado(ctk.CTk):
         ).grid(row=0, column=1, padx=4)
         
         # -------------------------------------------------------------
-        # PANEL CENTRAL: QR
+        # PANEL CENTRAL: QR ESTÁTICO FIJO AL PORTAL GENERAL
         # -------------------------------------------------------------
         self.frame_qr = ctk.CTkFrame(
             self.vista_actual,
             fg_color="#F9F9F9",
-            width=190,
+            width=200,
             corner_radius=18,
             border_width=1,
             border_color="#E0E0E0"
@@ -634,50 +634,50 @@ class AppGanado(ctk.CTk):
         
         ctk.CTkLabel(
             self.frame_qr,
-            text=" 🧾  Ficha móvil QR",
+            text=" 🌐  Portal Web Finca",
             font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
             text_color=self.COLOR_VERDE_OSCURO
         ).pack(pady=(16, 4))
         
         ctk.CTkLabel(
             self.frame_qr,
-            text="Escanea desde el celular para ver la ficha del animal.",
+            text="Escanea el código para ver el Catálogo General en vivo.",
             font=ctk.CTkFont(family="Segoe UI", size=10),
             text_color="#607D8B",
-            wraplength=150,
+            wraplength=160,
             justify="center"
         ).pack(pady=(0, 8))
         
         self.lbl_qr_visual = ctk.CTkLabel(
             self.frame_qr,
-            text=" 🐄 \nSeleccione un animal\npara generar QR",
+            text="Generando QR...",
             text_color="#4B5563",
             width=150,
             height=150,
             fg_color="#FFFFFF",
             corner_radius=14,
-            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold")
+            font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold")
         )
         self.lbl_qr_visual.pack(pady=8, padx=15)
         
         self.btn_guardar_qr = ctk.CTkButton(
             self.frame_qr,
             text=" 📥  Descargar QR",
-            width=145,
+            width=155,
             fg_color=self.COLOR_VERDE_MEDIO,
             hover_color="#1B5E20",
-            state="disabled",
+            state="normal",
             command=self.descargar_qr_seleccionado
         )
         self.btn_guardar_qr.pack(pady=(8, 5))
         
         self.btn_abrir_ficha = ctk.CTkButton(
             self.frame_qr,
-            text=" 🌐  Ver ficha",
-            width=145,
+            text=" 🌐  Ver Portal Web",
+            width=155,
             fg_color=self.COLOR_AZUL,
             hover_color="#0D47A1",
-            state="disabled",
+            state="normal",
             command=self.abrir_ficha_movil_seleccionada
         )
         self.btn_abrir_ficha.pack(pady=5)
@@ -688,6 +688,9 @@ class AppGanado(ctk.CTk):
         self.tabla_ganado = None
         self.crear_tabla_ganado_vista()
         self.cargar_datos_ganado()
+        
+        # Generamos la ficha estática del Portal Web por única vez
+        self.generar_qr_portal_fijo()
 
     def crear_label(self, parent, texto, fila):
         ctk.CTkLabel(
@@ -775,15 +778,8 @@ class AppGanado(ctk.CTk):
                 self.ent_observaciones.delete(0, "end")
                 self.ent_observaciones.insert(0, fila[9] if fila[9] else "")
                 
-                self.generar_qr_online(
-                    codigo=fila[0],
-                    nombre=fila[1],
-                    raza=fila[2],
-                    sexo=fila[3],
-                    peso=f"{float(fila[5] or 0):.2f}",
-                    estado=fila[6],
-                    observaciones=fila[9] if fila[9] else ""
-                )
+                # NOTA: Se ha removido la generación de QR dinámico para este animal.
+                # El QR del Portal Fijo se mantiene estático e inalterado a un costado de la pantalla.
         except Exception as e:
             print(f"Error al cargar selección: {e}")
             messagebox.showerror("Error", f"No se pudo cargar el animal seleccionado.\nDetalle: {e}")
@@ -791,19 +787,12 @@ class AppGanado(ctk.CTk):
             cursor.close()
             conn.close()
 
-    def generar_qr_online(self, codigo, nombre, raza, sexo, peso, estado, observaciones=""):
+    def generar_qr_portal_fijo(self):
         try:
-            params = urllib.parse.urlencode({
-                "id": codigo,
-                "nombre": nombre,
-                "raza": raza,
-                "sexo": sexo,
-                "peso": peso,
-                "estado": estado,
-                "obs": observaciones
-            })
-            url_destino = f"{self.url_base_movil}?{params}"
+            url_destino = self.url_base_movil
             self.url_ultimo_qr = url_destino
+            
+            # Codificación correcta del URL estático para la API del generador de códigos QR
             url_api = (
                 "https://api.qrserver.com/v1/create-qr-code/"
                 f"?size=180x180&data={urllib.parse.quote(url_destino)}"
@@ -811,41 +800,39 @@ class AppGanado(ctk.CTk):
             req = urllib.request.Request(url_api, headers={"User-Agent": "Mozilla/5.0"})
             with urllib.request.urlopen(req, timeout=10) as response:
                 binario_imagen = response.read()
+                
             img_original = Image.open(io.BytesIO(binario_imagen))
             self.img_qr = ctk.CTkImage(
                 light_image=img_original,
                 dark_image=img_original,
                 size=(140, 140)
             )
+            # Centrar el QR actualizando el widget
             self.lbl_qr_visual.configure(image=self.img_qr, text="")
             self.qr_temp_data = binario_imagen
-            self.qr_temp_codigo = codigo
-            self.btn_guardar_qr.configure(state="normal")
-            self.btn_abrir_ficha.configure(state="normal")
+            self.qr_temp_codigo = "Portal_Finca_El_Puente"
         except Exception as e:
             self.lbl_qr_visual.configure(
                 image=None,
                 text="⚠️ Error QR\nVerifique Internet"
             )
-            self.btn_guardar_qr.configure(state="disabled")
-            self.btn_abrir_ficha.configure(state="disabled")
-            print(f"Error al generar QR: {e}")
+            print(f"Error al generar QR estático: {e}")
 
     def abrir_ficha_movil_seleccionada(self):
         if self.url_ultimo_qr:
             webbrowser.open(self.url_ultimo_qr)
         else:
-            messagebox.showwarning("Atención", "Primero seleccione un animal para generar la ficha.")
+            messagebox.showwarning("Atención", "El enlace al portal no está listo.")
 
     def descargar_qr_seleccionado(self):
-        if not self.qr_temp_data or not self.qr_temp_codigo:
-            messagebox.showwarning("Atención", "Primero seleccione un animal.")
+        if not self.qr_temp_data:
+            messagebox.showwarning("Atención", "El código QR no está cargado.")
             return
         ruta_guardado = filedialog.asksaveasfilename(
             defaultextension=".png",
             filetypes=[("Imagen PNG", "*.png")],
-            title="Guardar Código QR",
-            initialfile=f"QR_FincaElPuente_{self.qr_temp_codigo}.png"
+            title="Guardar Código QR del Portal",
+            initialfile="QR_Portal_FincaElPuente.png"
         )
         if not ruta_guardado:
             return
@@ -854,7 +841,7 @@ class AppGanado(ctk.CTk):
                 f.write(self.qr_temp_data)
             messagebox.showinfo(
                 "Éxito",
-                "🎉 QR descargado con éxito.\nPuede imprimirlo y colocarlo en la ficha o etiqueta del animal."
+                "🎉 QR descargado con éxito.\nPuede imprimirlo y colocarlo en un lugar visible de la finca para acceso rápido."
             )
         except Exception as e:
             messagebox.showerror("Error", f"Fallo al guardar el QR: {e}")
@@ -950,15 +937,6 @@ class AppGanado(ctk.CTk):
             conn.commit()
             messagebox.showinfo("Éxito", "🗑️ Animal eliminado correctamente.")
             self.cargar_datos_ganado()
-            self.lbl_qr_visual.configure(
-                image=None,
-                text="🐄\nSeleccione un animal\npara generar QR"
-            )
-            self.btn_guardar_qr.configure(state="disabled")
-            self.btn_abrir_ficha.configure(state="disabled")
-            self.qr_temp_data = None
-            self.qr_temp_codigo = None
-            self.url_ultimo_qr = None
         except Exception as e:
             messagebox.showerror("Error SQL", f"No se pudo eliminar el animal.\nDetalle: {e}")
         finally:
@@ -1142,7 +1120,6 @@ class AppGanado(ctk.CTk):
         self.ent_alim_cod = ctk.CTkEntry(frame_inputs, width=190, placeholder_text="Ej: A001")
         self.ent_alim_cod.grid(row=1, column=1, pady=5, padx=(5, 16))
         
-        self.crear_label(frame_inputs, "Tipo de Alimento:", 2)
         self.cmb_alim_tipo = ctk.CTkComboBox(
             frame_inputs,
             values=["Concentrado", "Silo de Maíz", "Pasto de Corte", "Melaza", "Sales Minerales"],
@@ -1231,7 +1208,7 @@ class AppGanado(ctk.CTk):
             messagebox.showwarning("Atención", "Ingrese el código del animal y la cantidad en kilos.")
             return
         try:
-            cantidad_float = float(can)
+            amount_float = float(can)
         except ValueError:
             messagebox.showwarning("Dato inválido", "La cantidad debe ser un número válido.")
             return
@@ -1247,7 +1224,7 @@ class AppGanado(ctk.CTk):
                 (codigo_animal, tipo_alimento, cantidad_kg, fecha_registro)
                 VALUES (?, ?, ?, ?)
                 """,
-                (ani, tip, cantidad_float, fec)
+                (ani, tip, amount_float, fec)
             )
             conn.commit()
             messagebox.showinfo("Éxito", "✅ Asignación de alimento guardada.")
@@ -1389,7 +1366,7 @@ class AppGanado(ctk.CTk):
                 (ani, peso_float, fec)
             )
             conn.commit()
-            messagebox.showinfo("Éxito", "✅ Pesaje cronológico añadido.")
+            messagebox.showinfo("Éxito", "⚖️ Pesaje cronológico añadido.")
             self.cargar_datos_pesajes()
         except Exception as e:
             messagebox.showerror(
@@ -1939,7 +1916,6 @@ class ChatbotWindow(ctk.CTkToplevel):
     def enviar_consulta(self):
         consulta = self.ent_consulta.get().strip()
         if not consulta:
-            
             return
         self.agregar_burbuja_texto(consulta, es_asistente=False)
         self.ent_consulta.delete(0, "end")
@@ -1948,7 +1924,6 @@ class ChatbotWindow(ctk.CTkToplevel):
     def agregar_burbuja_texto(self, texto, es_asistente=True):
         contenedor = ctk.CTkFrame(self.historial_mensajes, fg_color="transparent")
         contenedor.pack(fill="x", pady=6)
-
         if es_asistente:
             color_fondo = "#ECEFF1"
             color_texto = "#263238"
@@ -1957,10 +1932,8 @@ class ChatbotWindow(ctk.CTkToplevel):
             color_fondo = "#E8F5E9"
             color_texto = "#1B5E20"
             lado_alineado = "right"
-
         burbuja = ctk.CTkFrame(contenedor, fg_color=color_fondo, corner_radius=14)
         burbuja.pack(side=lado_alineado, padx=10, ipady=7, ipadx=11)
-
         lbl = ctk.CTkLabel(
             burbuja,
             text=texto,
@@ -1970,7 +1943,6 @@ class ChatbotWindow(ctk.CTkToplevel):
             font=ctk.CTkFont(family="Segoe UI", size=12)
         )
         lbl.pack()
-
         try:
             self.historial_mensajes._parent_canvas.yview_moveto(1.0)
         except Exception:
@@ -1978,24 +1950,19 @@ class ChatbotWindow(ctk.CTkToplevel):
 
     def procesar_ia_ganadera(self, consulta):
         consulta_min = consulta.lower()
-
         conn = obtener_conexion()
         if not conn:
             self.agregar_burbuja_texto("⚠️ No logré conectar con SQL Server.", es_asistente=True)
             return
-        
         cursor = conn.cursor()
         try:
             if any(x in consulta_min for x in ["estadística", "estadistica", "general", "finca", "resumen", "total", "indicador", "promedio"]):
                 cursor.execute("SELECT COUNT(*) FROM ganado")
                 total_ganado = cursor.fetchone()[0] or 0
-
                 cursor.execute("SELECT SUM(cantidad_kg) FROM alimentacion")
                 total_alimento = float(cursor.fetchone()[0] or 0.0)
-
                 cursor.execute("SELECT AVG(peso_kg) FROM pesajes")
                 peso_promedio = float(cursor.fetchone()[0] or 0.0)
-
                 respuesta = (
                     f"📊 Reporte Estadístico Automatizado\n\n"
                     f"Actualmente en la Finca El Puente tenemos:\n"
@@ -2008,10 +1975,8 @@ class ChatbotWindow(ctk.CTkToplevel):
                 
             palabras = consulta.split()
             ejemplar_encontrado = None
-
             for palabra in palabras:
                 palabra_limpia = palabra.replace("?", "").replace(",", "").replace(".", "").strip()
-
                 cursor.execute(
                     """
                     SELECT codigo, nombre, raza, sexo, peso_inicial, estado, observaciones
@@ -2020,22 +1985,17 @@ class ChatbotWindow(ctk.CTkToplevel):
                     """,
                     (palabra_limpia, f"%{palabra_limpia}%")
                 )
-
                 fila = cursor.fetchone()
                 if fila:
                     ejemplar_encontrado = fila
                     break
-
             if ejemplar_encontrado:
                 cod, nom, raz, sex, peso_i, est, obs = ejemplar_encontrado
                 obs = obs or "Sin notas adicionales registradas."
-
                 cursor.execute("SELECT COUNT(*) FROM sanidad WHERE codigo_animal = ?", (cod,))
                 cont_sani = cursor.fetchone()[0] or 0
-
                 cursor.execute("SELECT SUM(cantidad_kg) FROM alimentacion WHERE codigo_animal = ?", (cod,))
                 cont_alim = float(cursor.fetchone()[0] or 0.0)
-
                 respuesta = (
                     f"🐄 Hoja de Datos — {nom} ({cod})\n\n"
                     f"• Raza: {raz}\n"
@@ -2052,7 +2012,6 @@ class ChatbotWindow(ctk.CTkToplevel):
             if any(x in consulta_min for x in ["vacuna", "enfermo", "sanidad", "tratamiento", "médico", "medico", "salud", "inyección", "inyeccion"]):
                 cursor.execute("SELECT COUNT(*) FROM sanidad")
                 total_tratamientos = cursor.fetchone()[0] or 0
-
                 respuesta = (
                     f"💉 Asistencia Clínica Veterinaria\n\n"
                     f"El sistema registra {total_tratamientos} tratamientos aplicados.\n"
@@ -2083,7 +2042,6 @@ class ChatbotWindow(ctk.CTkToplevel):
                 f"Prueba preguntando por un código de animal, un nombre, estadísticas o sanidad.",
                 es_asistente=True
             )
-
         except Exception as e:
             self.agregar_burbuja_texto(f"❌ Error al consultar la información: {e}", es_asistente=True)
         finally:
